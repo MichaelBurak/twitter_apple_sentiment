@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#tells”-in-tweets-developing-a-reliable-twitter-sentiment-analysis-classifier-for-tech-companies">"Tells” in Tweets: Developing a reliable Twitter sentiment analysis classifier for tech companies</a>
+<ul>
+<li><a href="#business-value">Business value:</a></li>
+<li><a href="#business-use-case">Business use case:</a></li>
+<li><a href="#evaluation">Evaluation:</a></li>
+</ul>
+</li>
+<li><a href="#data-preprocessing-and-eda">Data Preprocessing and EDA</a>
+<ul>
+<li></li>
+<li><a href="#a-core-issue-severe-class-imbalance">A core issue: severe class imbalance</a></li>
+<li><a href="#text-cleaning-and-visuals">Text cleaning and visuals</a></li>
+</ul>
+</li>
+<li><a href="#modeling">Modeling</a>
+<ul>
+<li><a href="#on-comparing-models">On comparing models:</a></li>
+<li><a href="#iterative-selectkbest">Iterative SelectKBest:</a></li>
+</ul>
+</li>
+<li><a href="#interpretation">Interpretation:</a>
+<ul>
+<li><a href="#undersampling---an-aside">Undersampling - an aside:</a></li>
+</ul>
+</li>
+<li><a href="#results-and-final-interpretation">Results and final interpretation:</a>
+<ul>
+<li><a href="#model-results">Model Results:</a></li>
+<li><a href="#model-interpretation">Model Interpretation:</a></li>
+</ul>
+</li>
+<li><a href="#business-recommendations">Business recommendations</a>
+<ul>
+<li><a href="#go-big">1. Go Big:</a></li>
+<li><a href="#data-integrity">2. Data Integrity:</a></li>
+<li><a href="#focus-on-the-tangible-and-reliable">3. Focus on the tangible and reliable:</a></li>
+</ul>
+</li>
+<li><a href="#future-work">Future work:</a>
+<ul>
+<li><a href="#outlier-detection-approaches">Outlier detection approaches:</a></li>
+<li><a href="#multilabel-classification">Multilabel classification</a></li>
+</ul>
+</li>
+<li><a href="#sources-incomplete">Sources: (Incomplete)</a></li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+<h1 id="tells”-in-tweets-developing-a-reliable-twitter-sentiment-analysis-classifier-for-tech-companies"><strong>"Tells” in Tweets: Developing a reliable Twitter sentiment analysis classifier for tech companies</strong></h1>
+</blockquote>
+<h2 id="business-value">Business value:</h2>
+<p>Being able to reliably classify tweets allows for a jumping off point for further analysis and modeling, as well as more ability to choose which tweets to examine for other use cases.</p>
+<h2 id="business-use-case">Business use case:</h2>
+<p>By identifying the negative and positive sentiments about Apple and Google, a tech business from the outside would be able to better understand the strategies, successes and blunders in the eye of the public for two tech giants. This would allow them to better their business by avoiding past mistakes or customer paint points and bouncing off of the successes of these companies.</p>
+<h2 id="evaluation">Evaluation:</h2>
+<p>Cohen’s Kappa score has been chosen as the metric of evaluation, especially fit for the imbalanced dataset and measuring the reliability of the classifier, how precise it is compared to being rated by chance. A robust and reliable classifier is needed for this business case due to how noisy and complicated twitter data can be.</p>
+<h1 id="data-preprocessing-and-eda">Data Preprocessing and EDA</h1>
+<ul>
+<li>The data consisted originally of three features:
+<ul>
+<li>The text of a given tweet written during the period of SXSW in Austin, TX, ostensibly regarding Apple or Google or related products/service.</li>
+<li>The product/service/company the tweet was directed at.</li>
+<li>The sentiment of the tweet, to be collapsed down to Negative, Neutral and Positive, later recoded to 0, 1, 2 as numerical values for analysis.</li>
+</ul>
+</li>
+</ul>
+<h3 id="null-values-first-a-large-number-of-null-values-were-found-in-the-data-in-one-column-and-removed">Null values: First, a large number of null values were found in the data in one column and removed:</h3>
+<p>This feature is dropped to focus on the text itself and later, statistics regarding the text, to make a more generalizable classifier than including information about the direction of the tweet, as well as a significant amount of null values compromising this feature.<br>
+<img src="https://i.imgur.com/1VqosYA.png" alt="Out of a sample of 1000, less than 400 of the column dictating what product or company the tweet was directed at were non-null"></p>
+<h3 id="columns-renamed-for-easier-reference-and-sentiment-mapped-to-numerical-values">Columns renamed for easier reference and sentiment mapped to numerical values:</h3>
+<pre><code>df = df.rename(columns={"tweet_text": "text", "is_there_an_emotion_directed_at_a_brand_or_product":"sentiment"})
+...
+df.sentiment = df.sentiment.map({'Positive emotion': 2, 'Negative emotion': 0, 'No emotion toward brand or product': 1, "I can't tell":1})
+</code></pre>
+<h2 id="a-core-issue-severe-class-imbalance">A core issue: severe class imbalance</h2>
+<p><img src="https://i.imgur.com/FWD0xVi.png" alt="enter image description here"></p>
+<h2 id="text-cleaning-and-visuals">Text cleaning and visuals</h2>
+<ul>
+<li>The text was then preprocessed mildly including to clean it of some html tags, punctuation marks, and other characters that would hinder analysis.</li>
+<li>Analysis was performed on the cleaned text after features were created out of the length of a tweet, words in a tweet, and amounts of hashtags, capital words, exclamation/question marks, the mean length of a word in a tweet, the count of unique words in a tweet, and the percentage of unique words in a tweet.</li>
+<li><img src="https://i.imgur.com/yW5pyLZ.jpg" alt="enter image description here"></li>
+<li><img src="https://i.imgur.com/8xN58ZA.png" alt="enter image description here"></li>
+<li>Tweet_len was dropped as a reasonably redundant feature captured in and correlated with other features.</li>
+<li>Tokenizing, stemming, lemmatization were performed.
+<ul>
+<li>A wordcloud before:</li>
+<li><img src="https://i.imgur.com/ehwvaff.png" alt="enter image description here"></li>
+<li>Wordcloud after:</li>
+<li><img src="https://i.imgur.com/r6X3VvE.png" alt="enter image description here"></li>
+</ul>
+</li>
+<li>TSNE was performed on various aspects of the cleaned text:
+<ul>
+<li>For more clustering and details, see the notebook.<img src="https://i.imgur.com/w1n4uRP.png" alt="enter image description here"></li>
+</ul>
+</li>
+<li>Frequent bigrams were calculated and plotted out, including on a graph structure, showing definite trends in the data around Google’s social network rumored to be called “Circles”, the iPad 2, and Apple’s popup store during SXSW 2011:</li>
+<li><img src="https://i.imgur.com/wV1R9hE.png" alt="enter image description here"></li>
+</ul>
+<h1 id="modeling">Modeling</h1>
+<ul>
+<li>Extensive early testing showed these LinearSVC with balanced class weights and ComplementNB to be the best compromise between performance and speed on this dataset without using tree-based methods(author’s note: I utilized trees extensively in my last work, so I am forgoing them this time.)</li>
+<li>TF-IDF vectorization capturing unigrams and bigrams was performed, as well as a stratified train-test-split to try to mitigate class imbalance.</li>
+<li>Initial modeling was poor, Cohen’s Kappa of Linear SVC was 0.018 and the Cohen’s Kappa of ComplementNB was 0, but MinMaxScaler raised these to  0.323 and 0.346.</li>
+</ul>
+<h2 id="on-comparing-models">On comparing models:</h2>
+<ul>
+<li>Linear SVC seemed to perform well on text classification on this dataset, along with ComplementNB right behind(.345 kappa). However, the number of parameters and tuning process in high dimensional feature space of Linear SVC limits its usefulness compared to the much faster Complement Naive Bayes without dimensionality reduction in place.</li>
+</ul>
+<h2 id="iterative-selectkbest">Iterative SelectKBest:</h2>
+<ul>
+<li>An iterative version of SelectKBest to derive an optimal number of features with a grid searching of ComplementNB was performed, selecting 30000 features out of a previous 50000+ and achieving a Cohen’s Kappa of .509.
+<ul>
+<li>This is very impressive performance by Complement NB with tuning all things considered, tuned LinearSVC hds performed well, however with the computational load of tuning LinearSVC, ComplementNB has similar performance with more speed. It is worth noting SVMs scale better to larger text in the literature (<a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf</a>), but with more moving parts than the Bayseian classifiers.</li>
+</ul>
+</li>
+</ul>
+<h1 id="interpretation">Interpretation:</h1>
+<ul>
+<li>
+<p>As a probabilistic classifier, I focused on the most predictive features in interpreting and evaluating the model.<br>
+<img src="https://i.imgur.com/Gjn3nNq.png" alt="enter image description here"></p>
+</li>
+<li>
+<p>The iPad and Apple seem to win the day, contextualizing and being contextualized by the coefficients unigrams and bigrams predicting tweets about it.</p>
+</li>
+<li>
+<p>It looks like while they occurr frequently, with the iPad 2 showing up most of all, the model did not find key bigrams to be extremely predictive, likely due to inverting the term document frequency and their high rate of occurrence.</p>
+</li>
+</ul>
+<h2 id="undersampling---an-aside">Undersampling - an aside:</h2>
+<ul>
+<li>No undersampling techniques seem to benefit performance of the ComplementNB model after reducing feature space.</li>
+<li>A note about SMOTE: Despite good results in the last round of imbalanced classification I undertook as a project, SMOTE and its variants were not used as they synthetically create text that is not within the original dataset.</li>
+</ul>
+<h1 id="results-and-final-interpretation">Results and final interpretation:</h1>
+<h2 id="model-results">Model Results:</h2>
+<ul>
+<li>Achieved fair or moderately reliable score with ComplementNB in a reduced feature space through SelectKBest.</li>
+<li>This classifier struggled, even with weighting of classes, stratification, attempts at resapling through undersampling and more, with the heavy imbalance in the data.</li>
+<li>All other classifiers struggled with the imbalance as well, the key impedement to performance in classification in this task.</li>
+<li>Issues with the feasability of tuning LinearSVC and SGDClassifier led to using ComplementNB, similar performance without having to reduce the dimensionality further through something like PCA and sacrifice interpretability.</li>
+<li>Moving forward with this project and model, I would seek to better address imbalance.</li>
+</ul>
+<h2 id="model-interpretation">Model Interpretation:</h2>
+<ul>
+<li>Interpretation was made difficult by performance issues, especially on the negative class, and its low support, as well as the use of bigrams and the difference between the preprocessed and raw dataframe.</li>
+<li>With that said, trends emerged in the EDA: the big showings of Apple and Google respectively with their popup store along with the iPad 2 and the rumored Circles social network contributed to positive ratings, while design critiques of the iPad 2 stood out in the negative class in EDA.</li>
+<li>Likely due to the workings of TF-IDF, the model itself focused on other coefficients, contextualizing that Apple predominated with its iPad 2 showing with a large number of equally predictive coefficients.</li>
+</ul>
+<h1 id="business-recommendations">Business recommendations</h1>
+<h2 id="go-big">1. Go Big:</h2>
+<ul>
+<li>The trends that stood out in the exploratory data analysis were big showings by Apple and Google during an important event. It is crucial to capitalize on hype and make bold moves during periods like SXSW: whether it be drumming up the launch of a new social network or creating a popup store.</li>
+</ul>
+<h2 id="data-integrity">2. Data Integrity:</h2>
+<ul>
+<li>The analysis was heavily compromised by data issues. Data collection and labeling must be done with an eye towards class balance and adequate support.</li>
+</ul>
+<h2 id="focus-on-the-tangible-and-reliable">3. Focus on the tangible and reliable:</h2>
+<ul>
+<li>The iPad 2 was a common theme among the text corresponding to the coefficients. Having an actual product as opposed to the rumors of Circles seems to have helped Apple considerably to win positive sentiment. Furthermore, utilize models such as ComplementNB that show how predictive a feature is to derive what are reliably predictive features.</li>
+</ul>
+<h1 id="future-work">Future work:</h1>
+<h2 id="outlier-detection-approaches">Outlier detection approaches:</h2>
+<ul>
+<li>Imbalanced learning can be treated as an outlier detection problem.</li>
+<li>I would like to explore this through techniques such as Isolation Forest.</li>
+<li>As well, I would look into adding additional features based off of the outlier and inlier values produced by those techniques to boost model performance.</li>
+</ul>
+<h2 id="multilabel-classification">Multilabel classification</h2>
+<ul>
+<li>This dataset could have been posed as a multilabel classification problem, by using the feature regarding direction of the tweet.</li>
+<li>I would like to examine the various approaches to multilabel classification and see if they yielded better or different results and in what sense.</li>
+</ul>
+<h1 id="sources-incomplete">Sources: (Incomplete)</h1>
+<ul>
+<li><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf</a></li>
+<li><a href="https://www.datacamp.com/community/tutorials/feature-selection-python">https://www.datacamp.com/community/tutorials/feature-selection-python</a></li>
+<li><a href="https://monkeylearn.com/blog/practical-explanation-naive-bayes-classifier/">https://monkeylearn.com/blog/practical-explanation-naive-bayes-classifier/</a></li>
+<li><a href="https://people.csail.mit.edu/jrennie/papers/icml03-nb.pdf">https://people.csail.mit.edu/jrennie/papers/icml03-nb.pdf</a></li>
+</ul>
+
+    </div>
+  </div>
+</body>
+
+</html>
