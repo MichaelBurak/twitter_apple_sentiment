@@ -97,16 +97,21 @@ df.sentiment = df.sentiment.map({'Positive emotion': 2, 'Negative emotion': 0, '
 <h2 id="text-cleaning-and-visuals">Text cleaning and visuals</h2>
 <ul>
 <li>The text was then preprocessed mildly including to clean it of some html tags, punctuation marks, and other characters that would hinder analysis.</li>
-<li>Analysis was performed on the cleaned text after features were created out of the length of a tweet, words in a tweet, and amounts of hashtags, capital words, exclamation/question marks, the mean length of a word in a tweet, the count of unique words in a tweet, and the percentage of unique words in a tweet.</li>
-<li><img src="https://i.imgur.com/yW5pyLZ.jpg" alt="enter image description here"></li>
-<li><img src="https://i.imgur.com/8xN58ZA.png" alt="enter image description here"></li>
+<li>Analysis was performed on the cleaned text after features were created out of the length of a tweet, words in a tweet, and amounts of hashtags, capital words, exclamation/question marks, the mean length of a word in a tweet, the count of unique words in a tweet, and the percentage of unique words in a tweet.
+<ul>
+<li>Pairplot of all numerical variables<br>
+<img src="https://i.imgur.com/yW5pyLZ.jpg" alt="enter image description here"></li>
+</ul>
+</li>
+<li>Correlation matrix(diagonal masked)<br>
+<img src="https://i.imgur.com/8xN58ZA.png" alt="enter image description here"></li>
 <li>Tweet_len was dropped as a reasonably redundant feature captured in and correlated with other features.</li>
 <li>Tokenizing, stemming, lemmatization were performed.
 <ul>
-<li>A wordcloud before:</li>
-<li><img src="https://i.imgur.com/ehwvaff.png" alt="enter image description here"></li>
-<li>Wordcloud after:</li>
-<li><img src="https://i.imgur.com/r6X3VvE.png" alt="enter image description here"></li>
+<li>A wordcloud before:<br>
+<img src="https://i.imgur.com/ehwvaff.png" alt="enter image description here"></li>
+<li>Wordcloud after:<br>
+<img src="https://i.imgur.com/r6X3VvE.png" alt="enter image description here"></li>
 </ul>
 </li>
 <li>TSNE was performed on various aspects of the cleaned text:
@@ -114,8 +119,8 @@ df.sentiment = df.sentiment.map({'Positive emotion': 2, 'Negative emotion': 0, '
 <li>For more clustering and details, see the notebook.<img src="https://i.imgur.com/w1n4uRP.png" alt="enter image description here"></li>
 </ul>
 </li>
-<li>Frequent bigrams were calculated and plotted out, including on a graph structure, showing definite trends in the data around Google’s social network rumored to be called “Circles”, the iPad 2, and Apple’s popup store during SXSW 2011:</li>
-<li><img src="https://i.imgur.com/wV1R9hE.png" alt="enter image description here"></li>
+<li>Frequent bigrams were calculated and plotted out, including on a graph structure, showing definite trends in the data around Google’s social network rumored to be called “Circles”, the iPad 2, and Apple’s popup store during SXSW 2011:<br>
+<img src="https://i.imgur.com/wV1R9hE.png" alt="enter image description here"></li>
 </ul>
 <h1 id="modeling">Modeling</h1>
 <ul>

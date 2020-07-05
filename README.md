@@ -37,18 +37,20 @@ This feature is dropped to focus on the text itself and later, statistics regard
 ## Text cleaning and visuals
 - The text was then preprocessed mildly including to clean it of some html tags, punctuation marks, and other characters that would hinder analysis.
 - Analysis was performed on the cleaned text after features were created out of the length of a tweet, words in a tweet, and amounts of hashtags, capital words, exclamation/question marks, the mean length of a word in a tweet, the count of unique words in a tweet, and the percentage of unique words in a tweet.
-- ![enter image description here](https://i.imgur.com/yW5pyLZ.jpg)
-- ![enter image description here](https://i.imgur.com/8xN58ZA.png)
+	- Pairplot of all numerical variables
+![enter image description here](https://i.imgur.com/yW5pyLZ.jpg)
+- Correlation matrix(diagonal masked)
+![enter image description here](https://i.imgur.com/8xN58ZA.png)
 - Tweet_len was dropped as a reasonably redundant feature captured in and correlated with other features.
 - Tokenizing, stemming, lemmatization were performed.
 	- A wordcloud before:
-	- ![enter image description here](https://i.imgur.com/ehwvaff.png)
+	 ![enter image description here](https://i.imgur.com/ehwvaff.png)
 	- Wordcloud after:
-	- ![enter image description here](https://i.imgur.com/r6X3VvE.png)
+	![enter image description here](https://i.imgur.com/r6X3VvE.png)
 - TSNE was performed on various aspects of the cleaned text:
 	- For more clustering and details, see the notebook.![enter image description here](https://i.imgur.com/w1n4uRP.png)
 - Frequent bigrams were calculated and plotted out, including on a graph structure, showing definite trends in the data around Google's social network rumored to be called "Circles", the iPad 2, and Apple's popup store during SXSW 2011: 
-- ![enter image description here](https://i.imgur.com/wV1R9hE.png)
+![enter image description here](https://i.imgur.com/wV1R9hE.png)
 # Modeling
 - Extensive early testing showed these LinearSVC with balanced class weights and ComplementNB to be the best compromise between performance and speed on this dataset without using tree-based methods(author's note: I utilized trees extensively in my last work, so I am forgoing them this time.)
 - TF-IDF vectorization capturing unigrams and bigrams was performed, as well as a stratified train-test-split to try to mitigate class imbalance.
