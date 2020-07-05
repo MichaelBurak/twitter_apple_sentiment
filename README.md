@@ -2,6 +2,7 @@
 
 
 > Written with [StackEdit](https://stackedit.io/).
+> ![enter image description here](https://i.imgur.com/P7JnVmp.jpg)
 > # **"Tells” in Tweets: Developing a reliable Twitter sentiment analysis classifier for tech companies**
 > 
 ## Business value: 
