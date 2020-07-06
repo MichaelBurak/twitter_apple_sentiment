@@ -110,7 +110,14 @@ This feature is dropped to focus on the text itself and later, statistics regard
 - I would like to examine the various approaches to multilabel classification and see if they yielded better or different results and in what sense. 
 
 # Sources: (Incomplete)
+
 - https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf
 - https://www.datacamp.com/community/tutorials/feature-selection-python
 - https://monkeylearn.com/blog/practical-explanation-naive-bayes-classifier/
 - https://people.csail.mit.edu/jrennie/papers/icml03-nb.pdf
+- https://youtu.be/NEaUSP4YerM
+- https://youtu.be/efR1C6CvhmE
+- https://www.youtube.com/watch?v=O2L2Uv9pdDA
+- https://stats.stackexchange.com/questions/82162/cohens-kappa-in-plain-english
+- https://www.analyticsvidhya.com/blog/2017/09/naive-bayes-explained/
+- Develops on and adapts own work in: https://github.com/MichaelBurak/crunchbase-analysis
